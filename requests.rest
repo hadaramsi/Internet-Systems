@@ -1,0 +1,15 @@
+###
+GET http://localhost:3000/
+###
+GET http://localhost:3000/post
+###
+GET http://localhost:3000/post/6370c7ba8c037fe9705309d8
+
+###
+POST http://localhost:3000/post
+Content-Type: application/json
+
+{
+    "message": "this is my message",
+    "sender":"123"
+}
