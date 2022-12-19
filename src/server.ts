@@ -16,5 +16,8 @@ db.once('open', () => { console.log('connected to mongo DB') })
 import postRouter from './route/post_route.js'
 app.use('/post', postRouter)
 
+import authRouter from './route/auth_route.js'
+app.use('/auth', authRouter)
+
 
 export = app
