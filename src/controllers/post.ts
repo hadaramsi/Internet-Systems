@@ -33,12 +33,11 @@ const putPostById = async (req: Request, res: Response) => {
         res.status(400).send({ 'error': 'fail adding new post to db' })
     }
 }
-
 const addNewPost = async (req: Request, res: Response, next) => {
     console.log(req.body)
     const post = new Post({
         message: req.body.message,
-        sender: req.body.sender
+        sender: req.body.userId
     })
     try {
         const newPost = await post.save()

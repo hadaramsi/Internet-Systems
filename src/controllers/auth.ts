@@ -2,7 +2,6 @@ import User from '../models/user_model'
 import { NextFunction, Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { use } from '../server'
 
 function sendError(res: Response, error: string) {
     res.status(400).send({
@@ -26,12 +25,15 @@ const register = async (req: Request, res: Response) => {
 
         const salt = await bcrypt.genSalt(10)
         const encryptedPwd = await bcrypt.hash(password, salt)
-        let newUser = new User({
+        const newUser = new User({
             'email': email,
             'password': encryptedPwd
         })
-        newUser = await newUser.save()
-        return res.status(200).send(newUser)
+        await newUser.save()
+        return res.status(200).send({
+            'email': email,
+            '_id': newUser._id
+        })
     } catch (err) {
         return sendError(res, 'fail ...')
     }
@@ -39,12 +41,12 @@ const register = async (req: Request, res: Response) => {
 
 
 async function generateTokens(userId: string) {
-    const accessToken = await jwt.sign(
+    const accessToken = jwt.sign(
         { 'id': userId },
         process.env.ACCESS_TOKEN_SECRET,
         { 'expiresIn': process.env.JWT_TOKEN_EXPIRATION }
     )
-    const refreshToken = await jwt.sign(
+    const refreshToken = jwt.sign(
         { 'id': userId },
         process.env.REFRESH_TOKEN_SECRET
     )

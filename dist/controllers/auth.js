@@ -32,12 +32,15 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         const salt = yield bcrypt_1.default.genSalt(10);
         const encryptedPwd = yield bcrypt_1.default.hash(password, salt);
-        let newUser = new user_model_1.default({
+        const newUser = new user_model_1.default({
             'email': email,
             'password': encryptedPwd
         });
-        newUser = yield newUser.save();
-        return res.status(200).send(newUser);
+        yield newUser.save();
+        return res.status(200).send({
+            'email': email,
+            '_id': newUser._id
+        });
     }
     catch (err) {
         return sendError(res, 'fail ...');
@@ -45,8 +48,8 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 function generateTokens(userId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const accessToken = yield jsonwebtoken_1.default.sign({ 'id': userId }, process.env.ACCESS_TOKEN_SECRET, { 'expiresIn': process.env.JWT_TOKEN_EXPIRATION });
-        const refreshToken = yield jsonwebtoken_1.default.sign({ 'id': userId }, process.env.REFRESH_TOKEN_SECRET);
+        const accessToken = jsonwebtoken_1.default.sign({ 'id': userId }, process.env.ACCESS_TOKEN_SECRET, { 'expiresIn': process.env.JWT_TOKEN_EXPIRATION });
+        const refreshToken = jsonwebtoken_1.default.sign({ 'id': userId }, process.env.REFRESH_TOKEN_SECRET);
         return { 'accessToken': accessToken, 'refreshToken': refreshToken };
     });
 }
