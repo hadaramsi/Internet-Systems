@@ -1,21 +1,16 @@
 /**
 * @swagger
 * tags:
-* name: Post
-* description: The Post API
+*   name: Post
+*   description: The Posts API
 */
 
-
-// /**
-// * @swagger
-// * tags:
-// * name: Post
-// * description: The Posts API
-// */
 import express from 'express'
 const router = express.Router()
 import post from '../controllers/post.js'
 import auth from '../controllers/auth.js'
+
+
 // /**
 // * @swagger
 // * components:

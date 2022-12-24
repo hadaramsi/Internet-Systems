@@ -2,22 +2,22 @@
 /**
 * @swagger
 * tags:
-* name: Post
-* description: The Post API
+*   name: Post
+*   description: The Posts API
 */
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-// /**
-// * @swagger
-// * tags:
-// * name: Post
-// * description: The Posts API
-// */
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const post_js_1 = __importDefault(require("../controllers/post.js"));
 const auth_js_1 = __importDefault(require("../controllers/auth.js"));
+// /**
+// * @swagger
+// * tags:
+// * name: Post
+// * description: The Post API
+// */
 // /**
 // * @swagger
 // * components:

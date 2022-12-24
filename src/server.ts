@@ -51,7 +51,7 @@ if (process.env.NODE_ENV == "development") {
                 version: "1.0.0",
                 description: "REST server including authentication using JWT",
             },
-            servers: [{ url: "http://localhost:5000", },],
+            servers: [{ url: "http://localhost:3000", },],
         },
         apis: ["./src/route/*.ts"],
     };

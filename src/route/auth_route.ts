@@ -1,9 +1,9 @@
-/**
-* @swagger
-* tags:
-* name: Auth
-* description: The Authentication API
-*/
+// /**
+// * @swagger
+// * tags:
+// * name: Auth
+// * description: The Authentication API
+// */
 
 import express from 'express'
 const router = express.Router()
@@ -19,12 +19,12 @@ import auth from '../controllers/auth.js'
 // *       bearerFormat: JWT
 // */
 
-// /**
-// * @swagger
-// * tags:
-// *   name: Auth
-// *   description: The Authentication API
-// */
+/**
+* @swagger
+* tags:
+*   name: Auth
+*   description: The Authentication API
+*/
 
 // /**
 // * @swagger

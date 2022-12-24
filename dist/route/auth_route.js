@@ -1,10 +1,10 @@
 "use strict";
-/**
-* @swagger
-* tags:
-* name: Auth
-* description: The Authentication API
-*/
+// /**
+// * @swagger
+// * tags:
+// * name: Auth
+// * description: The Authentication API
+// */
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -20,12 +20,12 @@ const auth_js_1 = __importDefault(require("../controllers/auth.js"));
 // *       scheme: bearer
 // *       bearerFormat: JWT
 // */
-// /**
-// * @swagger
-// * tags:
-// *   name: Auth
-// *   description: The Authentication API
-// */
+/**
+* @swagger
+* tags:
+*   name: Auth
+*   description: The Authentication API
+*/
 // /**
 // * @swagger
 // * components:
