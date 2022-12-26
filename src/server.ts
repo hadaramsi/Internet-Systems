@@ -6,14 +6,18 @@ if (process.env.NODE_ENV == 'test') {
 }
 import express from 'express'
 const app = express()
+import http from 'http';
+const server = http.createServer(app);
 
+// import dotenv from 'dotenv'
+// dotenv.config()
 
 import bodyParser from 'body-parser'
 app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }))
 app.use(bodyParser.json())
 
-import mongoose from 'mongoose'
-mongoose.connect(process.env.DATABASE_URL) //, { useNewUrlParser: true })
+import mongoose from "mongoose"
+mongoose.connect(process.env.DATABASE_URL) //,{useNewUrlParser:true})
 const db = mongoose.connection
 db.on('error', error => { console.error(error) })
 db.once('open', () => { console.log('connected to mongo DB') })
@@ -64,4 +68,4 @@ if (process.env.NODE_ENV == "development") {
     app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 }
 
-export = app
+export = server
