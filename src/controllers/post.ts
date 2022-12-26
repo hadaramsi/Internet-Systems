@@ -1,5 +1,6 @@
 import Post from '../models/post_model'
 import { Request, Response } from 'express'
+
 const getAllPostsEvent = async () => {
     console.log("")
     try {

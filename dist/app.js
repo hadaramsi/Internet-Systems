@@ -9,8 +9,4 @@ server_1.default.listen(process.env.PORT, () => {
     console.log('Server started');
 });
 module.exports = server_1.default;
-// import app from './server'
-// app.listen(process.env.PORT, () => {
-//     console.log('Server started')
-// })
 //# sourceMappingURL=app.js.map

@@ -13,8 +13,6 @@ const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 const http_1 = __importDefault(require("http"));
 const server = http_1.default.createServer(app);
-// import dotenv from 'dotenv'
-// dotenv.config()
 const body_parser_1 = __importDefault(require("body-parser"));
 app.use(body_parser_1.default.urlencoded({ extended: true, limit: '1mb' }));
 app.use(body_parser_1.default.json());
@@ -27,29 +25,9 @@ const post_route_js_1 = __importDefault(require("./route/post_route.js"));
 app.use('/post', post_route_js_1.default);
 const auth_route_js_1 = __importDefault(require("./route/auth_route.js"));
 app.use('/auth', auth_route_js_1.default);
-// import swaggerUI from "swagger-ui-express"
-// import swaggerJsDoc from "swagger-jsdoc"
-// if (process.env.NODE_ENV == "development") {
-//     const options = {
-//         definition: {
-//             openapi: "3.0.0",
-//             info: {
-//                 title: "Web Dev 2022 REST API-Hadar",
-//                 version: "1.0.0",
-//                 description: "REST server including authentication using JWT",
-//             },
-//             servers: [{ url: "http://localhost:3000", },],
-//         },
-//         apis: ["./src/route/*.ts"],
-//     };
-//     const specs = swaggerJsDoc(options);
-//     app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
-// }
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 if (process.env.NODE_ENV == "development") {
-    // const swaggerUI = require("swagger-ui-express")
-    // const swaggerJsDoc = require("swagger-jsdoc")
     const options = {
         definition: {
             openapi: "3.0.0",
