@@ -7,6 +7,10 @@ import request from 'supertest'
 import Post from '../models/post_model'
 import User from '../models/user_model'
 
+const newPostMessage = 'This is the new test post message - socket test'
+let newPostId = ''
+const newPostMessageUpdated = 'This is the update message - socket test'
+
 const userEmail = "user1@gmail.com"
 const userPassword = "12345"
 
@@ -79,6 +83,22 @@ describe("my awesome project", () => {
         client1.socket.emit("echo:echo", { 'msg': 'hello' })
     });
 
+    test("post add new post test", (done) => {
+        client1.socket.once("post:post.response", (arg) => {
+            console.log("on any" + arg);
+            expect(arg.body.message).toBe(newPostMessage);
+            expect(arg.body.sender).toBe(client1.id);
+            expect(arg.status).toBe("ok");
+            newPostId = arg.body._id;
+            done();
+        });
+        console.log(" test post add new post");
+        client1.socket.emit("post:post", {
+            message: newPostMessage,
+            sender: client1.id,
+        });
+    });
+
     test("Post get all test", (done) => {
         client1.socket.once('post:get_all', (arg) => {
             console.log("on any " + arg)
@@ -88,6 +108,45 @@ describe("my awesome project", () => {
         console.log(" test post get all")
         client1.socket.emit("post:get_all", "stam")
     });
+
+    test("get post by id test", (done) => {
+        client1.socket.once('post:get_all', (arg) => {
+            console.log("on any " + arg)
+            expect(arg.body.message).toBe(newPostMessage);
+            expect(arg.body.sender).toBe(client1.id);
+            expect(arg.status).toBe('OK');
+            done();
+        });
+        console.log(" test post get post by id")
+        client1.socket.emit("post:get:id", {
+            id: newPostId,
+        });
+    });
+
+    test("get post by sender test", (done) => {
+        client1.socket.once('post:get_all', (arg) => {
+            console.log("on any " + arg)
+            expect(arg.body.message).toBe(newPostMessage);
+            expect(arg.body.sender).toBe(client1.id);
+            expect(arg.status).toBe('OK');
+            done();
+        });
+        console.log(" test post get post by sender")
+        client1.socket.emit("post:get:sender", {
+            sender: newPostId,
+        });
+    });
+
+    // test("Get get all posts test", (done) => {
+    //     client1.socket.once('get:get_all posts', (arg) => {
+    //         console.log("on any " + arg)
+    //         expect(arg.status).toBe('OK');
+    //         done();
+    //     });
+    //     console.log(" test get all posts")
+    //     client1.socket.emit("get:get_all_posts", "stam")
+    // });
+
     test("Test chat messages", (done) => {
         const message = "hi... test 123"
         client2.socket.once('chat:message', (args) => {

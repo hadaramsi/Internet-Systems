@@ -5,10 +5,12 @@
 *   description: The Posts API
 */
 
-import express from 'express'
+import express, { response } from 'express'
 const router = express.Router()
 import post from '../controllers/post.js'
 import auth from '../controllers/auth.js'
+import request from '../request'
+// import response from '../response'
 /**
 * @swagger
 * components:
@@ -56,7 +58,18 @@ import auth from '../controllers/auth.js'
  *  
  */
 
-router.get('/', auth.authenticateMiddleware, post.getAllPosts)
+router.get('/', auth.authenticateMiddleware, async (req, res) => {
+    try {
+        const response = await post.getAllPosts(request.fromRestRequest(req))
+        response.sendRestResponse(res)
+    } catch (err) {
+        console.log("route err ")
+        res.status(400).send({
+            'status': 'fail',
+            'message': err.message
+        })
+    }
+})
 /**
  * @swagger
  * /post/{id}:
@@ -81,7 +94,18 @@ router.get('/', auth.authenticateMiddleware, post.getAllPosts)
  *               $ref: '#/components/schemas/Post'
  *  
  */
-router.get('/:id', auth.authenticateMiddleware, post.getPostById)
+router.get('/:id', auth.authenticateMiddleware, async (req, res) => {
+    try {
+        const response = await post.getPostById(request.fromRestRequest(req))
+        response.sendRestResponse(res)
+    } catch (err) {
+        console.log("route err ")
+        res.status(400).send({
+            'status': 'fail',
+            'message': err.message
+        })
+    }
+})
 /**
  * @swagger
  * /post:
@@ -105,7 +129,24 @@ router.get('/:id', auth.authenticateMiddleware, post.getPostById)
  *               $ref: '#/components/schemas/Post'
  *  
  */
-router.post('/', auth.authenticateMiddleware, post.addNewPost)
+router.post('/', auth.authenticateMiddleware, async (req, res) => {
+    try {
+        console.log("in add new post")
+        const response = await post.addNewPost(request.fromRestRequest(req))
+        console.log("line 112 err ")
+
+        response.sendRestResponse(res)
+    } catch (err) {
+        console.log("route err ")
+
+        res.status(400).send({
+            'status': 'fail',
+            'message': err.message
+        })
+    }
+})
+
+
 /**
  * @swagger
  * /post/{id}:
@@ -136,6 +177,17 @@ router.post('/', auth.authenticateMiddleware, post.addNewPost)
  *               $ref: '#/components/schemas/Post'
  *  
  */
-router.put('/:id', auth.authenticateMiddleware, post.putPostById)
+router.put('/:id', auth.authenticateMiddleware, async (req, res) => {
+    try {
+        const response = await post.putPostById(request.fromRestRequest(req))
+        response.sendRestResponse(res)
+    } catch (err) {
+        console.log("route err ")
+        res.status(400).send({
+            'status': 'fail',
+            'message': err.message
+        })
+    }
+})
 
 export = router

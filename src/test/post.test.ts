@@ -44,26 +44,27 @@ describe("Posts Tests", () => {
     test("add new post", async () => {
         const response = await request(app).post('/post').set('Authorization', 'JWT ' + accessToken)
             .send({
-                "message": newPostMessage,
-                "sender": newPostSender
+                message: newPostMessage,
+                sender: newPostSender
             })
         expect(response.statusCode).toEqual(200)
-        expect(response.body.message).toEqual(newPostMessage)
-        expect(response.body.sender).toEqual(newPostSender)
-        newPostId = response.body._id
-
+        expect(response.body.post.message).toEqual(newPostMessage)
+        expect(response.body.post.sender).toEqual(newPostSender)
+        newPostId = response.body.post._id
     })
+
+
     test("get all posts", async () => {
         const response = await request(app).get('/post').set('Authorization', 'JWT ' + accessToken)
         expect(response.statusCode).toEqual(200)
-        expect(response.body[0].message).toEqual(newPostMessage)
-        expect(response.body[0].sender).toEqual(newPostSender)
+        expect(response.body.post[0].message).toEqual(newPostMessage)
+        expect(response.body.post[0].sender).toEqual(newPostSender)
     })
     test("get post by Id", async () => {
         const response = await request(app).get('/post/' + newPostId).set('Authorization', 'JWT ' + accessToken)
         expect(response.statusCode).toEqual(200)
-        expect(response.body.message).toEqual(newPostMessage)
-        expect(response.body.sender).toEqual(newPostSender)
+        expect(response.body.post.message).toEqual(newPostMessage)
+        expect(response.body.post.sender).toEqual(newPostSender)
     })
     test("get post by wrong id fails", async () => {
         const response = await request(app).get('/post/12345').set('Authorization', 'JWT ' + accessToken)
@@ -72,8 +73,8 @@ describe("Posts Tests", () => {
     test("get post by sender", async () => {
         const response = await request(app).get('/post?sender=' + newPostSender).set('Authorization', 'JWT ' + accessToken)
         expect(response.statusCode).toEqual(200)
-        expect(response.body[0].message).toEqual(newPostMessage)
-        expect(response.body[0].sender).toEqual(newPostSender)
+        expect(response.body.post[0].message).toEqual(newPostMessage)
+        expect(response.body.post[0].sender).toEqual(newPostSender)
     })
     // test("get all posts containing given text in post message", async () => {
     //     const response = await request(app).get('/post?message=new')
@@ -88,13 +89,13 @@ describe("Posts Tests", () => {
                 "sender": newPostSender
             })
         expect(response.statusCode).toEqual(200)
-        expect(response.body.message).toEqual(newPostMessageUpdated)
-        expect(response.body.sender).toEqual(newPostSender)
+        expect(response.body.post.message).toEqual(newPostMessageUpdated)
+        expect(response.body.post.sender).toEqual(newPostSender)
 
         response = await request(app).get('/post/' + newPostId).set('Authorization', 'JWT ' + accessToken)
         expect(response.statusCode).toEqual(200)
-        expect(response.body.message).toEqual(newPostMessageUpdated)
-        expect(response.body.sender).toEqual(newPostSender)
+        expect(response.body.post.message).toEqual(newPostMessageUpdated)
+        expect(response.body.post.sender).toEqual(newPostSender)
 
         response = await request(app).put('/post/12345').set('Authorization', 'JWT ' + accessToken)
             .send({
@@ -108,8 +109,8 @@ describe("Posts Tests", () => {
                 "message": newPostMessageUpdated,
             })
         expect(response.statusCode).toEqual(200)
-        expect(response.body.message).toEqual(newPostMessageUpdated)
-        expect(response.body.sender).toEqual(newPostSender)
+        expect(response.body.post.message).toEqual(newPostMessageUpdated)
+        expect(response.body.post.sender).toEqual(newPostSender)
     })
 
 })

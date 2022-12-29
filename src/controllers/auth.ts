@@ -147,8 +147,10 @@ const authenticateMiddleware = async (req: Request, res: Response, next: NextFun
         const user = <TokenInfo>jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.body.userId = user.id
         console.log("token user: " + user)
+        console.log("authenticateMiddleware pass ")
         return next()
     } catch (err) {
+        console.log("authenticateMiddleware err ")
         return sendError(res, 'fail validating token')
     }
 

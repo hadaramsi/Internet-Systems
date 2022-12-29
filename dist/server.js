@@ -21,6 +21,7 @@ mongoose_1.default.connect(process.env.DATABASE_URL); //,{useNewUrlParser:true})
 const db = mongoose_1.default.connection;
 db.on('error', error => { console.error(error); });
 db.once('open', () => { console.log('connected to mongo DB'); });
+app.use(express_1.default.static("public"));
 const post_route_js_1 = __importDefault(require("./route/post_route.js"));
 app.use('/post', post_route_js_1.default);
 const auth_route_js_1 = __importDefault(require("./route/auth_route.js"));

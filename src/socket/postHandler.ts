@@ -7,11 +7,9 @@ export = (io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap>,
 
     const getAllPosts = async () => {
         console.log("getAllPosts handler")
-
         const res = await postController.getAllPostsEvent()
         socket.emit('post:get_all', res)
     }
-
     const getPostById = (payload) => {
         socket.emit('echo:echo', payload)
     }
