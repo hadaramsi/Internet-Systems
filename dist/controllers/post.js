@@ -14,20 +14,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 const post_model_1 = __importDefault(require("../models/post_model"));
 const response_1 = __importDefault(require("../response"));
 const error_1 = __importDefault(require("../error"));
-const getAllPostsEvent = () => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("");
-    try {
-        const posts = yield post_model_1.default.find();
-        return { status: 'OK', data: posts };
-    }
-    catch (err) {
-        return { status: 'FAIL', data: "" };
-    }
-});
+// const getAllPostsEvent = async () => {
+//     console.log("")
+//     try {
+//         const posts = await Post.find()
+//         return { status: 'OK', data: posts }
+//     } catch (err) {
+//         return { status: 'FAIL', data: "" }
+//     }
+// }
 const getAllPosts = (req) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let posts = {};
-        if (req.query.sender == null) {
+        if (req.query.sender == null || req.query == null) {
             posts = yield post_model_1.default.find();
         }
         else {
@@ -77,5 +76,5 @@ const addNewPost = (req) => __awaiter(void 0, void 0, void 0, function* () {
         return new response_1.default(null, req.userId, new error_1.default(400, err.message));
     }
 });
-module.exports = { getAllPosts, addNewPost, getPostById, putPostById, getAllPostsEvent };
+module.exports = { getAllPosts, addNewPost, getPostById, putPostById };
 //# sourceMappingURL=post.js.map

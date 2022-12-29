@@ -12,18 +12,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 const post_1 = __importDefault(require("../controllers/post"));
+const request_1 = __importDefault(require("../request"));
 module.exports = (io, socket) => {
-    const getAllPosts = () => __awaiter(void 0, void 0, void 0, function* () {
-        console.log("getAllPosts handler");
-        const res = yield post_1.default.getAllPostsEvent();
-        socket.emit('post:get_all', res);
+    const getAllPosts = (body) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log("getAllPosts with socketId: %s", socket.id);
+        try {
+            const response = yield post_1.default.getAllPosts(new request_1.default(body, socket.data.user, null, null));
+            socket.emit('post:get_all.response', response);
+        }
+        catch (err) {
+            socket.emit('post:get_all.response', { 'status': 'fail' });
+        }
     });
-    const getPostById = (payload) => {
-        socket.emit('echo:echo', payload);
-    };
-    const addNewPost = (payload) => {
-        socket.emit('echo:echo', payload);
-    };
+    const addNewPost = (body) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log("postAdd with socketId: %s", socket.id);
+        try {
+            const response = yield post_1.default.addNewPost(new request_1.default(body, socket.data.user, null, null));
+            socket.emit('post:add_new.response', response);
+        }
+        catch (err) {
+            socket.emit('post:add_new.response', { 'status': 'fail' });
+        }
+    });
+    const getPostById = (body) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log("getPostById with socketId: %s", socket.id);
+        try {
+            const response = yield post_1.default.getPostById(new request_1.default(body, socket.data.user, null, null));
+            socket.emit('post:get_by_id.response', response);
+        }
+        catch (err) {
+            socket.emit('post:get_by_id.response', { 'status': 'fail' });
+        }
+    });
+    // const addNewPost = (payload) => {
+    //     socket.emit('echo:echo', payload)
+    // }
     console.log('register echo handlers');
     socket.on("post:get_all", getAllPosts);
     socket.on("post:get_by_id", getPostById);

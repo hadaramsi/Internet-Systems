@@ -92,6 +92,14 @@ describe("my awesome project", () => {
             sender: client1.id,
         });
     });
+    // test("postAdd", (done) => {
+    //     client1.socket.emit('post:add', { 'message': 'this is my message' })
+    //     client1.socket.on('post:add.response', (arg) => {
+    //         expect(arg.message).toEqual(newPostMessage)
+    //         expect(arg.sender).toEqual(client1.id)
+    //         done();
+    //     });
+    // })
     test("Post get all test", (done) => {
         client1.socket.once('post:get_all', (arg) => {
             console.log("on any " + arg);

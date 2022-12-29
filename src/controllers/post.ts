@@ -4,19 +4,19 @@ import response from '../response'
 import error from '../error'
 import { Request, Response } from 'express'
 
-const getAllPostsEvent = async () => {
-    console.log("")
-    try {
-        const posts = await Post.find()
-        return { status: 'OK', data: posts }
-    } catch (err) {
-        return { status: 'FAIL', data: "" }
-    }
-}
+// const getAllPostsEvent = async () => {
+//     console.log("")
+//     try {
+//         const posts = await Post.find()
+//         return { status: 'OK', data: posts }
+//     } catch (err) {
+//         return { status: 'FAIL', data: "" }
+//     }
+// }
 const getAllPosts = async (req: request) => {
     try {
         let posts = {}
-        if (req.query.sender == null) {
+        if (req.query.sender == null || req.query == null) {
             posts = await Post.find()
         } else {
             posts = await Post.find({ 'sender': req.query.sender })
@@ -67,4 +67,4 @@ const addNewPost = async (req: request) => {
     }
 }
 
-export = { getAllPosts, addNewPost, getPostById, putPostById, getAllPostsEvent }
+export = { getAllPosts, addNewPost, getPostById, putPostById }
