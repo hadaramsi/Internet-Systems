@@ -2,7 +2,6 @@ import Post from '../models/post_model'
 import request from '../request'
 import response from '../response'
 import error from '../error'
-import { Request, Response } from 'express'
 
 // const getAllPostsEvent = async () => {
 //     console.log("")
@@ -19,7 +18,7 @@ const getAllPosts = async (req: request) => {
         if (req.query.sender == null || req.query == null) {
             posts = await Post.find()
         } else {
-            posts = await Post.find({ 'sender': req.query.sender })
+            posts = await Post.find({ sender: req.query.sender })
         }
         return new response(posts, req.userId, null)
     } catch (err) {

@@ -4,9 +4,14 @@ class response {
         this.body = {};
         this.userId = null;
         this.err = null;
+        this.status = null;
         this.body = body;
         this.userId = userId;
         this.err = err;
+        if (err == null)
+            this.status = 'ok';
+        else
+            this.status = 'fail';
     }
     sendRestResponse(res) {
         if (this.err == null) {

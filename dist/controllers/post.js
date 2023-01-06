@@ -30,7 +30,7 @@ const getAllPosts = (req) => __awaiter(void 0, void 0, void 0, function* () {
             posts = yield post_model_1.default.find();
         }
         else {
-            posts = yield post_model_1.default.find({ 'sender': req.query.sender });
+            posts = yield post_model_1.default.find({ sender: req.query.sender });
         }
         return new response_1.default(posts, req.userId, null);
     }

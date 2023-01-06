@@ -15,41 +15,60 @@ const post_1 = __importDefault(require("../controllers/post"));
 const request_1 = __importDefault(require("../request"));
 module.exports = (io, socket) => {
     const getAllPosts = (body) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log("getAllPosts with socketId: %s", socket.id);
+        console.log("getAllPosts with socketId: %s", socket.data.user);
         try {
             const response = yield post_1.default.getAllPosts(new request_1.default(body, socket.data.user, null, null));
-            socket.emit('post:get_all.response', response);
+            socket.emit('post:get.response', response);
         }
         catch (err) {
-            socket.emit('post:get_all.response', { 'status': 'fail' });
+            socket.emit('post:get.response', { status: 'fail' });
         }
     });
     const addNewPost = (body) => __awaiter(void 0, void 0, void 0, function* () {
         console.log("postAdd with socketId: %s", socket.id);
         try {
             const response = yield post_1.default.addNewPost(new request_1.default(body, socket.data.user, null, null));
-            socket.emit('post:add_new.response', response);
+            socket.emit('post:add.response', response);
         }
         catch (err) {
-            socket.emit('post:add_new.response', { 'status': 'fail' });
+            socket.emit('post:add.response', { status: 'fail' });
         }
     });
     const getPostById = (body) => __awaiter(void 0, void 0, void 0, function* () {
         console.log("getPostById with socketId: %s", socket.id);
         try {
-            const response = yield post_1.default.getPostById(new request_1.default(body, socket.data.user, null, null));
-            socket.emit('post:get_by_id.response', response);
+            const response = yield post_1.default.getPostById(new request_1.default(body, socket.data.user, null, body));
+            socket.emit('post:get:id.response', response);
         }
         catch (err) {
-            socket.emit('post:get_by_id.response', { 'status': 'fail' });
+            socket.emit('post:get:id.response', { status: 'fail' });
         }
     });
-    // const addNewPost = (payload) => {
-    //     socket.emit('echo:echo', payload)
-    // }
+    const getPostBySender = (body) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log('getPostBySender with socketId: %s', socket.data.user);
+        try {
+            const response = yield post_1.default.getAllPosts(new request_1.default(body, socket.data.user, body, null));
+            socket.emit('post:get:sender.response', response);
+        }
+        catch (err) {
+            socket.emit('post:get:sender.response', { status: 'fail' });
+        }
+    });
+    const updatePostById = (body) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log('updatePostById with socketId: %s', socket.data.user);
+        try {
+            const response = yield post_1.default.putPostById(new request_1.default(body, socket.data.user, null, body));
+            socket.emit('post:put.response', response);
+        }
+        catch (err) {
+            socket.emit('post:put.response', { status: 'fail' });
+        }
+    });
     console.log('register echo handlers');
-    socket.on("post:get_all", getAllPosts);
-    socket.on("post:get_by_id", getPostById);
-    socket.on("post:add_new", addNewPost);
+    socket.on("post:get", getAllPosts);
+    socket.on("post:get:id", getPostById);
+    socket.on("post:add", addNewPost);
+    socket.on("post:get:sender", getPostBySender);
+    socket.on("post:put", updatePostById);
 };
 //# sourceMappingURL=postHandler.js.map

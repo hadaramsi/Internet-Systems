@@ -5,7 +5,7 @@ class request {
     userId = null
     query = null
     params = null
-    constructor(body, userId, query, params) {
+    constructor(body, userId: string, query, params) {
         this.body = body
         this.userId = userId
         this.query = query
