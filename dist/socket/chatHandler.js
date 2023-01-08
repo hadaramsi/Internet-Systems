@@ -37,14 +37,14 @@ module.exports = (io, socket) => {
         console.log('chat:get_all_message');
         try {
             const response = yield message_1.default.getAllMessages(new request_1.default(payload, socket.data.user, payload, null));
-            io.to(socket.data.user).emit("chat:get.response", response);
+            io.to(socket.data.user).emit('chat:get', response);
         }
         catch (err) {
-            socket.emit("chat:get.response", { status: 'fail' });
+            socket.emit('chat:get', { status: 'fail' });
         }
     });
     console.log('register chat handlers');
     socket.on("chat:send_message", sendMessage);
-    socket.on("chat:get", getAllMessages);
+    socket.on('chat:get', getAllMessages);
 };
 //# sourceMappingURL=chatHandler.js.map

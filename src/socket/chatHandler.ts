@@ -33,13 +33,13 @@ export = (io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap>,
             const response = await messageController.getAllMessages(
                 new request(payload, socket.data.user, payload, null)
             )
-            io.to(socket.data.user).emit("chat:get.response", response)
+            io.to(socket.data.user).emit('chat:get', response)
         } catch (err) {
-            socket.emit("chat:get.response", { status: 'fail' })
+            socket.emit('chat:get', { status: 'fail' })
         }
     }
 
     console.log('register chat handlers')
     socket.on("chat:send_message", sendMessage)
-    socket.on("chat:get", getAllMessages)
+    socket.on('chat:get', getAllMessages)
 }

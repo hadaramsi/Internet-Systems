@@ -23,6 +23,7 @@ const newPostMessage = 'This is the new test post message - socket test';
 const anotherPostMessage = 'This is the another test post message - socket test';
 let newPostId = '';
 const newPostMessageUpdated = 'This is the update message - socket test';
+let newMessage = '';
 const message = "this is my message";
 const userEmail = "user1@gmail.com";
 const userPassword = "12345";
@@ -72,7 +73,7 @@ describe("my project", () => {
         client2.socket.close();
         yield post_model_1.default.remove();
         yield user_model_1.default.remove();
-        yield message_model_1.default.remove();
+        // await Message.remove()
         app_1.default.close();
         mongoose_1.default.connection.close();
     }));
@@ -216,11 +217,12 @@ describe("my project", () => {
         });
     });
     test("Test chat get all messages from client1 to client2", (done) => {
-        client1.socket.once("chat:get.response", (args) => {
+        client1.socket.once("chat:get", (args) => {
             expect(args.body.length).toBe(1);
+            expect(args.body[0].reciver).toBe(client2.id);
             expect(args.body[0].body).toBe(message);
             expect(args.body[0].sender).toBe(client1.id);
-            expect(args.body[0].reciver).toBe(client2.id);
+            // expect(args.body.reciver).toBe(client2.id)
             expect(args.status).toBe('ok');
             done();
         });
@@ -229,7 +231,7 @@ describe("my project", () => {
         });
     });
     test("Test chat get all messages to client1", (done) => {
-        client1.socket.once("chat:get.response", (args) => {
+        client1.socket.once("chat:get", (args) => {
             expect(args.body.length).toBe(0);
             expect(args.status).toBe('ok');
             done();
@@ -238,7 +240,7 @@ describe("my project", () => {
             "reciver": client1.id
         });
     });
-    test("Test chat send messages", (done) => {
+    test("Test chat send messages from client 1 to client 2", (done) => {
         // const message = "hi... test 123"
         client2.socket.once('chat:message', (args) => {
             expect(args.to).toBe(client2.id);
