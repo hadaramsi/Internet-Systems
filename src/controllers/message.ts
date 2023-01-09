@@ -7,13 +7,12 @@ const getAllMessages = async (req: request) => {
     try {
         let messages = {}
         if (req.query != null && req.query.sender != null) {
-            console.log("if" + req.query.sender)
             messages = await Message.find({ sender: req.query.sender })
-            console.log("this is the messages we get")
-            console.log(messages)
         } else if (req.query != null && req.query.reciver != null) {
-            console.log("else if")
             messages = await Message.find({ reciver: req.query.reciver })
+        }
+        else {
+            messages = await Message.find()
         }
         return new response(messages, req.userId, null)
     } catch (err) {

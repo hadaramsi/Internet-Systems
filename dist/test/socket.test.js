@@ -216,6 +216,29 @@ describe("my project", () => {
             message: newPostMessageUpdated,
         });
     });
+    test("Test chat send messages from client 1 to client 2", (done) => {
+        // const message = "hi... test 123"
+        client2.socket.once('chat:message', (args) => {
+            expect(args.to).toBe(client2.id);
+            expect(args.message).toBe(message);
+            expect(args.from).toBe(client1.id);
+            expect(args.res.status).toBe('ok');
+            done();
+        });
+        client1.socket.emit("chat:send_message", {
+            "to": client2.id,
+            "message": message
+        });
+    });
+    test("Test chat send empty messages", (done) => {
+        client2.socket.once('chat:message', (args) => {
+            expect(args.res.status).toBe('fail');
+            done();
+        });
+        client1.socket.emit("chat:send_message", {
+            "to": client2.id
+        });
+    });
     test("Test chat get all messages from client1 to client2", (done) => {
         client1.socket.once("chat:get", (args) => {
             expect(args.body.length).toBe(1);
@@ -238,29 +261,6 @@ describe("my project", () => {
         });
         client1.socket.emit("chat:get", {
             "reciver": client1.id
-        });
-    });
-    test("Test chat send messages from client 1 to client 2", (done) => {
-        // const message = "hi... test 123"
-        client2.socket.once('chat:message', (args) => {
-            expect(args.to).toBe(client2.id);
-            expect(args.message).toBe(message);
-            expect(args.from).toBe(client1.id);
-            expect(args.res.status).toBe('ok');
-            done();
-        });
-        client1.socket.emit("chat:send_message", {
-            "to": client2.id,
-            "message": message
-        });
-    });
-    test("Test chat send empty messages", (done) => {
-        client2.socket.once('chat:message', (args) => {
-            expect(args.res.status).toBe('fail');
-            done();
-        });
-        client1.socket.emit("chat:send_message", {
-            "to": client2.id
         });
     });
 });

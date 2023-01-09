@@ -18,14 +18,13 @@ const getAllMessages = (req) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let messages = {};
         if (req.query != null && req.query.sender != null) {
-            console.log("if" + req.query.sender);
             messages = yield message_model_1.default.find({ sender: req.query.sender });
-            console.log("this is the messages we get");
-            console.log(messages);
         }
         else if (req.query != null && req.query.reciver != null) {
-            console.log("else if");
             messages = yield message_model_1.default.find({ reciver: req.query.reciver });
+        }
+        else {
+            messages = yield message_model_1.default.find();
         }
         return new response_1.default(messages, req.userId, null);
     }
