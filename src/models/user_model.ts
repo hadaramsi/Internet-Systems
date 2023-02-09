@@ -10,6 +10,18 @@ const userSchema = new mongoose.Schema({
     },
     refresh_tokens: {
         type: [String]
+    },
+    _id: {
+        type: String,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    avatarUrl: {
+        type: String,
+        required: true
     }
 })
 export = mongoose.model('User', userSchema)
