@@ -21,10 +21,12 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage: storage });
-
+interface MulterRequest extends Request {
+    file: any
+}
 router.post('/file', upload.single("file"), function (req: Request, res: Response) {
-    console.log("router.post(/file: " + base + req.file.path)
-    res.status(200).send({ url: base + req.file.path })
+    console.log("router.post(/file: " + base + (req as MulterRequest).file.path)
+    res.status(200).send({ url: base + (req as MulterRequest).file.path })
 });
 
 

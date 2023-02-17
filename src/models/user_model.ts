@@ -11,15 +11,11 @@ const userSchema = new mongoose.Schema({
     refresh_tokens: {
         type: [String]
     },
-    _id: {
-        type: String,
-        required: true
-    },
     name: {
         type: String,
         required: true
     },
-    avatarUrl: {
+    imageUrl: {
         type: String,
         required: true
     }
