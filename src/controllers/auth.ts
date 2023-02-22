@@ -12,8 +12,11 @@ function sendError(res: Response, error: string) {
 const register = async (req: Request, res: Response) => {
     const email = req.body.email
     const password = req.body.password
+    const fullName = req.body.fullName
+    const image = req.body.image
 
-    if (email == null || password == null) {
+
+    if (email == null || password == null || image == null || fullName == null) {
         return sendError(res, 'please provide valid email and password')
     }
 
@@ -27,7 +30,9 @@ const register = async (req: Request, res: Response) => {
         const encryptedPwd = await bcrypt.hash(password, salt)
         const newUser = new User({
             'email': email,
-            'password': encryptedPwd
+            'password': encryptedPwd,
+            'fullName': fullName,
+            'image': image
         })
         await newUser.save()
         return res.status(200).send({
