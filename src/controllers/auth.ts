@@ -10,13 +10,15 @@ function sendError(res: Response, error: string) {
 }
 
 const register = async (req: Request, res: Response) => {
+    console.log("killlll meeeeee")
+    console.log(req.body)
     const email = req.body.email
     const password = req.body.password
     const fullName = req.body.fullName
     const image = req.body.image
 
 
-    if (email == null || password == null || image == null || fullName == null) {
+    if (email == null || password == null || fullName == null) {
         return sendError(res, 'please provide valid email and password')
     }
 
@@ -36,7 +38,7 @@ const register = async (req: Request, res: Response) => {
         })
         await newUser.save()
         return res.status(200).send({
-            'email': email,
+            '_email': newUser._email, //---------------------------------cheack---------------------
             '_id': newUser._id
         })
     } catch (err) {

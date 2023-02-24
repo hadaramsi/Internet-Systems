@@ -1,8 +1,6 @@
 import User from '../models/user_model'
 import { Request, Response } from 'express'
 
-
-
 const getAllUsers = async (req: Request, res: Response) => {
     console.log('getAllUsers')
 
@@ -30,9 +28,10 @@ const addNewUser = async (req: Request, res: Response) => {
     console.log(req.body)
 
     const user = new User({
-        _id: req.body._id,
-        name: req.body.name,
-        avatarUrl: req.body.avatarUrl,
+        _email: req.body._email,
+        password: req.body.password,
+        fullName: req.body.fullName,
+        image: req.body.image,
     })
 
     try {

@@ -20,9 +20,13 @@ function sendError(res, error) {
     });
 }
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("killlll meeeeee");
+    console.log(req.body);
     const email = req.body.email;
     const password = req.body.password;
-    if (email == null || password == null) {
+    const fullName = req.body.fullName;
+    const image = req.body.image;
+    if (email == null || password == null || fullName == null) {
         return sendError(res, 'please provide valid email and password');
     }
     try {
@@ -34,11 +38,13 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const encryptedPwd = yield bcrypt_1.default.hash(password, salt);
         const newUser = new user_model_1.default({
             'email': email,
-            'password': encryptedPwd
+            'password': encryptedPwd,
+            'fullName': fullName,
+            'image': image
         });
         yield newUser.save();
         return res.status(200).send({
-            'email': email,
+            '_email': newUser._email,
             '_id': newUser._id
         });
     }
