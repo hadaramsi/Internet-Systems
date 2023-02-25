@@ -64,6 +64,8 @@ async function generateTokens(userId: string) {
 const login = async (req: Request, res: Response) => {
     const email = req.body.email
     const password = req.body.password
+    console.log(req.body)
+
     if (email == null || password == null) {
         return sendError(res, 'please provide valid email and password')
     }
