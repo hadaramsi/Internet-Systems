@@ -62,7 +62,7 @@ function generateTokens(userId) {
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const email = req.body.email;
     const password = req.body.password;
-    console.log(req);
+    // console.log(req.body)
     if (email == null || password == null) {
         return sendError(res, 'please provide valid email and password');
     }
