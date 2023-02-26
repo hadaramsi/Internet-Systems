@@ -25,6 +25,20 @@ const getAllPosts = async (req: request) => {
         return new response(null, req.userId, new error(400, err.message))
     }
 }
+const getUserPosts = async (req: request) => {
+    try {
+        // let posts = {}
+        const posts = await Post.findByUserId(req.params.id)
+        // if (req.query.sender == null || req.query == null) {
+        //     posts = await Post.find()
+        // } else {
+        //     posts = await Post.find({ sender: req.query.sender })
+        // }
+        return new response(posts, req.userId, null)
+    } catch (err) {
+        return new response(null, req.userId, new error(400, err.message))
+    }
+}
 
 const getPostById = async (req: request) => {
     try {
@@ -66,4 +80,4 @@ const addNewPost = async (req: request) => {
     }
 }
 
-export = { getAllPosts, addNewPost, getPostById, putPostById }
+export = { getAllPosts, addNewPost, getPostById, putPostById, getUserPosts }

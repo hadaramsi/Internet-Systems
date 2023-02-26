@@ -38,6 +38,21 @@ const getAllPosts = (req) => __awaiter(void 0, void 0, void 0, function* () {
         return new response_1.default(null, req.userId, new error_1.default(400, err.message));
     }
 });
+const getUserPosts = (req) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // let posts = {}
+        const posts = yield post_model_1.default.findByUserId(req.params.id);
+        // if (req.query.sender == null || req.query == null) {
+        //     posts = await Post.find()
+        // } else {
+        //     posts = await Post.find({ sender: req.query.sender })
+        // }
+        return new response_1.default(posts, req.userId, null);
+    }
+    catch (err) {
+        return new response_1.default(null, req.userId, new error_1.default(400, err.message));
+    }
+});
 const getPostById = (req) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const posts = yield post_model_1.default.findById(req.params.id);
@@ -76,5 +91,5 @@ const addNewPost = (req) => __awaiter(void 0, void 0, void 0, function* () {
         return new response_1.default(null, req.userId, new error_1.default(400, err.message));
     }
 });
-module.exports = { getAllPosts, addNewPost, getPostById, putPostById };
+module.exports = { getAllPosts, addNewPost, getPostById, putPostById, getUserPosts };
 //# sourceMappingURL=post.js.map
