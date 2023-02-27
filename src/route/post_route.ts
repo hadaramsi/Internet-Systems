@@ -36,6 +36,44 @@ import request from '../request'
  * @swagger
  * /post:
  *   get:
+ *     summary: get list of post of user from server
+ *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: sender
+ *         schema:
+ *           type: string
+ *           description: filter the posts according to the given sender id
+ *     responses:
+ *       200:
+ *         description: the list of posts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items: 
+ *                  $ref: '#/components/schemas/Post'
+ *  
+ */
+
+router.get('/', auth.authenticateMiddleware, async (req, res) => {
+    try {
+        const response = await post.getAllPosts(request.fromRestRequest(req))
+        response.sendRestResponse(res)
+    } catch (err) {
+        console.log("route err ")
+        res.status(400).send({
+            'status': 'fail',
+            'message': err.message
+        })
+    }
+})
+/**
+ * @swagger
+ * /post:
+ *   get:
  *     summary: get list of post from server
  *     tags: [Post]
  *     security:
