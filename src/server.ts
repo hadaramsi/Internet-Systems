@@ -81,8 +81,8 @@ app.use('/auth', authRouter)
 import postRouter from './route/post_route.js'
 app.use('/post', postRouter)
 
-import studentRouter from './route/user_route.js'
-app.use('/student', studentRouter)
+import userRouter from './route/user_route.js'
+app.use('/user', userRouter)
 
 import fileRouter from './route/file_route.js'
 app.use('/file', fileRouter)

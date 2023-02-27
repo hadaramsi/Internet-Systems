@@ -133,7 +133,6 @@ router.post('/', auth.authenticateMiddleware, async (req, res) => {
     try {
         console.log("in add new post")
         const response = await post.addNewPost(request.fromRestRequest(req))
-        console.log("line 112 err ")
 
         response.sendRestResponse(res)
     } catch (err) {

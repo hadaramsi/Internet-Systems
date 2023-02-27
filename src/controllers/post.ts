@@ -62,10 +62,13 @@ const putPostById = async (req: request) => {
 const addNewPost = async (req: request) => {
     console.log(req.body)
     const msg = req.body["message"]
-    const sender = req.body["sender"]
+    const sender = req.body["userId"]
+    const image = req.body["imageUrl"]
+
     const post = new Post({
         message: msg,
-        sender: sender
+        sender: sender,
+        imageUrl: image
     })
     console.log("before try add new post")
 
@@ -74,6 +77,7 @@ const addNewPost = async (req: request) => {
         console.log("save post")
         return new response(newPost, req.userId, null)
     } catch (err) {
+        console.log(err)
         console.log("dont save post")
 
         return new response(null, req.userId, new error(400, err.message))

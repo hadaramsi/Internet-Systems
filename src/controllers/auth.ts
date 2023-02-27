@@ -3,8 +3,8 @@ import { NextFunction, Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
-function sendError(res: Response, error: string) {
-    res.status(400).send({
+function sendError(status: number, res: Response, error: string) {
+    res.status(status).send({
         'err': error
     })
 }
@@ -19,13 +19,13 @@ const register = async (req: Request, res: Response) => {
 
 
     if (email == null || password == null || fullName == null) {
-        return sendError(res, 'please provide valid email and password')
+        return sendError(400, res, 'please provide valid email and password')
     }
 
     try {
         const user = await User.findOne({ 'email': email })
         if (user != null) {
-            return sendError(res, 'user already registered, try a different name')
+            return sendError(400, res, 'user already registered, try a different name')
         }
 
         const salt = await bcrypt.genSalt(10)
@@ -38,11 +38,11 @@ const register = async (req: Request, res: Response) => {
         })
         await newUser.save()
         return res.status(200).send({
-            '_email': newUser._email, //---------------------------------cheack---------------------
+            'email': newUser._email, //---------------------------------cheack---------------------
             '_id': newUser._id
         })
     } catch (err) {
-        return sendError(res, 'fail ...')
+        return sendError(400, res, 'fail ...')
     }
 }
 
@@ -67,15 +67,15 @@ const login = async (req: Request, res: Response) => {
     // console.log(req.body)
 
     if (email == null || password == null) {
-        return sendError(res, 'please provide valid email and password')
+        return sendError(400, res, 'please provide valid email and password')
     }
 
     try {
         const user = await User.findOne({ 'email': email })
-        if (user == null) return sendError(res, 'incorrect user or password')
+        if (user == null) return sendError(400, res, 'incorrect user or password')
 
         const match = await bcrypt.compare(password, user.password)
-        if (!match) return sendError(res, 'incorrect user or password')
+        if (!match) return sendError(400, res, 'incorrect user or password')
 
         const tokens = await generateTokens(user._id.toString())
 
@@ -86,7 +86,7 @@ const login = async (req: Request, res: Response) => {
         return res.status(200).send({ "tokens": tokens, "userId": user._id })
     } catch (err) {
         console.log("error: " + err)
-        return sendError(res, 'fail checking user')
+        return sendError(400, res, 'fail checking user')
     }
 }
 
@@ -99,18 +99,24 @@ type TokenInfo = {
     id: string
 }
 const refresh = async (req: Request, res: Response) => {
+    console.log("heyyyyyy-------")
     const refreshToken = getTokenFromRequest(req)
-    if (refreshToken == null) return sendError(res, 'authentication missing')
+    if (refreshToken == null) return sendError(400, res, 'authentication missing')
 
     try {
+        console.log("heyyyyyy in try-------")
         const user: TokenInfo = <TokenInfo>jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
         const userObj = await User.findById(user.id)
-        if (userObj == null) return sendError(res, 'fail validating token')
+        if (userObj == null) {
+            console.log("heyyyyyy in try if 1-------")
+            return sendError(400, res, 'fail validating token')
+        }
 
         if (!userObj.refresh_tokens.includes(refreshToken)) {
+            console.log("heyyyyyy in try if 2-------")
             userObj.refresh_tokens = []
             await userObj.save()
-            return sendError(res, 'fail validating token')
+            return sendError(400, res, 'fail validating token')
         }
 
         const tokens = await generateTokens(userObj._id.toString())
@@ -122,36 +128,39 @@ const refresh = async (req: Request, res: Response) => {
 
         return res.status(200).send(tokens)
     } catch (err) {
-        return sendError(res, 'fail validating token')
+        console.log("400 ----- heyyyyyy-------")
+        return sendError(400, res, 'fail validating token')
+
     }
 }
 
 const logout = async (req: Request, res: Response) => {
     const refreshToken = getTokenFromRequest(req)
-    if (refreshToken == null) return sendError(res, 'authentication missing')
+    if (refreshToken == null) return sendError(400, res, 'authentication missing')
 
     try {
         const user = <TokenInfo>jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
         const userObj = await User.findById(user.id)
-        if (userObj == null) return sendError(res, 'fail validating token')
+        if (userObj == null) return sendError(400, res, 'fail validating token')
 
         if (!userObj.refresh_tokens.includes(refreshToken)) {
             userObj.refresh_tokens = []
             await userObj.save()
-            return sendError(res, 'fail validating token')
+            return sendError(400, res, 'fail validating token')
         }
 
         userObj.refresh_tokens.splice(userObj.refresh_tokens.indexOf(refreshToken), 1)
         await userObj.save()
         return res.status(200).send()
     } catch (err) {
-        return sendError(res, 'fail validating token')
+        return sendError(400, res, 'fail validating token')
     }
 }
 
 const authenticateMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const token = getTokenFromRequest(req)
-    if (token == null) return sendError(res, 'authentication missing')
+    console.log("i am in authenticateMiddleware auth.ts")
+    if (token == null) return sendError(400, res, 'authentication missing')
     try {
         const user = <TokenInfo>jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
         req.body.userId = user.id
@@ -159,8 +168,8 @@ const authenticateMiddleware = async (req: Request, res: Response, next: NextFun
         console.log("authenticateMiddleware pass ")
         return next()
     } catch (err) {
-        console.log("authenticateMiddleware err ")
-        return sendError(res, 'fail validating token')
+        console.log("authenticate Middle ware err ")
+        return sendError(401, res, 'fail validating token')
     }
 
 }

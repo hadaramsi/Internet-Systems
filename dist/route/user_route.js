@@ -10,6 +10,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 const express_1 = __importDefault(require("express"));
 const user_1 = __importDefault(require("../controllers/user"));
+const auth_1 = __importDefault(require("../controllers/auth"));
 const router = express_1.default.Router();
 /**
 * @swagger
@@ -78,7 +79,7 @@ router.get('/', user_1.default.getAllUsers);
  *               $ref: '#/components/schemas/Post'
  *
  */
-router.get('/:id', user_1.default.getUserById);
+router.get('/:id', auth_1.default.authenticateMiddleware, user_1.default.getUserById);
 /**
  * @swagger
  * /student:

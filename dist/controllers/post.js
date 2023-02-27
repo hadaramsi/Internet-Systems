@@ -75,10 +75,12 @@ const putPostById = (req) => __awaiter(void 0, void 0, void 0, function* () {
 const addNewPost = (req) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body);
     const msg = req.body["message"];
-    const sender = req.body["sender"];
+    const sender = req.body["userId"];
+    const image = req.body["imageUrl"];
     const post = new post_model_1.default({
         message: msg,
-        sender: sender
+        sender: sender,
+        imageUrl: image
     });
     console.log("before try add new post");
     try {
@@ -87,6 +89,7 @@ const addNewPost = (req) => __awaiter(void 0, void 0, void 0, function* () {
         return new response_1.default(newPost, req.userId, null);
     }
     catch (err) {
+        console.log(err);
         console.log("dont save post");
         return new response_1.default(null, req.userId, new error_1.default(400, err.message));
     }

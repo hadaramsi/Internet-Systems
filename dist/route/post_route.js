@@ -145,7 +145,6 @@ router.post('/', auth_js_1.default.authenticateMiddleware, (req, res) => __await
     try {
         console.log("in add new post");
         const response = yield post_js_1.default.addNewPost(request_1.default.fromRestRequest(req));
-        console.log("line 112 err ");
         response.sendRestResponse(res);
     }
     catch (err) {

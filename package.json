@@ -10,7 +10,8 @@
         "devstart": "nodemon ./src/app.ts",
         "testAuth": "tsc && jest --detectOpenHandles --forceExit --runInBand ./dist/test/auth.test.js",
         "testPost": "tsc && jest --detectOpenHandles --forceExit --runInBand ./dist/test/post.test.js",
-        "testSocket": "tsc && jest --detectOpenHandles --forceExit --runInBand ./dist/test/socket.test.js"
+        "testSocket": "tsc && jest --detectOpenHandles --forceExit --runInBand ./dist/test/socket.test.js",
+        "testUser": "tsc && jest --detectOpenHandles --forceExit --runInBand ./dist/test/user.test.js"
     },
     "author": "hadar",
     "license": "ISC",

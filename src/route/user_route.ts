@@ -6,7 +6,8 @@
 */
 
 import express from 'express'
-import student from '../controllers/user'
+import user from '../controllers/user'
+import auth from '../controllers/auth'
 const router = express.Router()
 
 /**
@@ -52,7 +53,7 @@ const router = express.Router()
  *                  $ref: '#/components/schemas/Student'
  *  
  */
-router.get('/', student.getAllUsers)
+router.get('/', user.getAllUsers)
 
 /**
  * @swagger
@@ -78,7 +79,7 @@ router.get('/', student.getAllUsers)
  *               $ref: '#/components/schemas/Post'
  *  
  */
-router.get('/:id', student.getUserById)
+router.get('/:id', auth.authenticateMiddleware, user.getUserById)
 
 /**
  * @swagger
@@ -101,7 +102,7 @@ router.get('/:id', student.getUserById)
  *               $ref: '#/components/schemas/Student'
  *  
  */
-router.post('/', student.addNewUser)
+router.post('/', user.addNewUser)
 
 
 export = router
