@@ -69,6 +69,8 @@ const putPostById = async (req: request) => {
 }
 const deletePost = async (req: request) => {
     try {
+        console.log("delete post - back")
+
         await Post.findByIdAndDelete(req.params.id)
         return new response(null, req.userId, null)
     } catch (err) {

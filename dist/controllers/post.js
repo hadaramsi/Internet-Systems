@@ -80,6 +80,7 @@ const putPostById = (req) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const deletePost = (req) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log("delete post - back");
         yield post_model_1.default.findByIdAndDelete(req.params.id);
         return new response_1.default(null, req.userId, null);
     }

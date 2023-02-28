@@ -180,7 +180,7 @@ router.get('/:id', auth_js_1.default.authenticateMiddleware, (req, res) => __awa
  *               $ref: '#/components/schemas/Post'
  *
  */
-router.get('/:id', auth_js_1.default.authenticateMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete('/:id', auth_js_1.default.authenticateMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield post_js_1.default.deletePost(request_1.default.fromRestRequest(req));
         response.sendRestResponse(res);

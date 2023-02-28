@@ -169,7 +169,7 @@ router.get('/:id', auth.authenticateMiddleware, async (req, res) => {
  *               $ref: '#/components/schemas/Post'
  *  
  */
-router.get('/:id', auth.authenticateMiddleware, async (req, res) => {
+router.delete('/:id', auth.authenticateMiddleware, async (req, res) => {
     try {
         const response = await post.deletePost(request.fromRestRequest(req))
         response.sendRestResponse(res)
