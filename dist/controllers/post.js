@@ -65,8 +65,12 @@ const getPostById = (req) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const putPostById = (req) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("success to update post in db");
+        console.log("req in putPostById");
+        console.log(req);
         const post = yield post_model_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        console.log("update post :");
+        console.log("success to update post in db");
+        console.log(post);
         return new response_1.default(post, req.userId, null);
     }
     catch (err) {

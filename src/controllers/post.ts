@@ -55,8 +55,12 @@ const getPostById = async (req: request) => {
 
 const putPostById = async (req: request) => {
     try {
-        console.log("success to update post in db")
+        console.log("req in putPostById");
+        console.log(req)
         const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        console.log("update post :")
+        console.log("success to update post in db")
+        console.log(post)
         return new response(post, req.userId, null)
     } catch (err) {
         console.log("fail to update post in db")
