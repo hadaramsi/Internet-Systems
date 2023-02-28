@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 const user_model_1 = __importDefault(require("../models/user_model"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('getAllUsers');
     try {
@@ -24,6 +25,7 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //console.log("GETTTTTTTTTTTTTTTTTTuSER")
     console.log(req.params.id);
     try {
         const users = yield user_model_1.default.findById(req.params.id);
@@ -31,6 +33,24 @@ const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     catch (err) {
         res.status(400).send({ 'error': "fail to get users from db" });
+    }
+});
+const putUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("PUTuSER");
+    if (req.body.password != undefined) {
+        const salt = yield bcrypt_1.default.genSalt(10);
+        req.body.password = yield bcrypt_1.default.hash(req.body.password, salt);
+    }
+    try {
+        const user = yield user_model_1.default.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+        });
+        console.log("save update user in db");
+        res.status(200).send(user);
+    }
+    catch (err) {
+        console.log("fail to update user in db");
+        res.status(400).send({ error: "fail to update user in db" });
     }
 });
 const addNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -51,5 +71,5 @@ const addNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(400).send({ 'error': 'fail adding new user to db' });
     }
 });
-module.exports = { getAllUsers, getUserById, addNewUser };
+module.exports = { getAllUsers, getUserById, addNewUser, putUserById };
 //# sourceMappingURL=user.js.map

@@ -15,6 +15,9 @@ import error from '../error'
 const getAllPosts = async (req: request) => {
     try {
         let posts = {}
+        console.log("req!-------------------------")
+        console.log(req)
+
         if (req.query.sender == null || req.query == null) {
             posts = await Post.find()
         } else {
@@ -52,10 +55,20 @@ const getPostById = async (req: request) => {
 
 const putPostById = async (req: request) => {
     try {
+        console.log("success to update post in db")
         const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true })
         return new response(post, req.userId, null)
     } catch (err) {
         console.log("fail to update post in db")
+        return new response(null, req.userId, new error(400, err.message))
+    }
+}
+const deletePost = async (req: request) => {
+    try {
+        await Post.findByIdAndDelete(req.params.id)
+        return new response(null, req.userId, null)
+    } catch (err) {
+        console.log("fail to delete post in db")
         return new response(null, req.userId, new error(400, err.message))
     }
 }
@@ -84,4 +97,4 @@ const addNewPost = async (req: request) => {
     }
 }
 
-export = { getAllPosts, addNewPost, getPostById, putPostById }
+export = { getAllPosts, addNewPost, getPostById, putPostById, deletePost }

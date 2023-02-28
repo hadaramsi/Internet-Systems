@@ -10,7 +10,6 @@ function sendError(status: number, res: Response, error: string) {
 }
 
 const register = async (req: Request, res: Response) => {
-    console.log("killlll meeeeee")
     console.log(req.body)
     const email = req.body.email
     const password = req.body.password
@@ -38,7 +37,7 @@ const register = async (req: Request, res: Response) => {
         })
         await newUser.save()
         return res.status(200).send({
-            'email': newUser._email, //---------------------------------cheack---------------------
+            'email': newUser.email, //---------------------------------cheack---------------------
             '_id': newUser._id
         })
     } catch (err) {
@@ -99,21 +98,17 @@ type TokenInfo = {
     id: string
 }
 const refresh = async (req: Request, res: Response) => {
-    console.log("heyyyyyy-------")
     const refreshToken = getTokenFromRequest(req)
     if (refreshToken == null) return sendError(400, res, 'authentication missing')
 
     try {
-        console.log("heyyyyyy in try-------")
         const user: TokenInfo = <TokenInfo>jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
         const userObj = await User.findById(user.id)
         if (userObj == null) {
-            console.log("heyyyyyy in try if 1-------")
             return sendError(400, res, 'fail validating token')
         }
 
         if (!userObj.refresh_tokens.includes(refreshToken)) {
-            console.log("heyyyyyy in try if 2-------")
             userObj.refresh_tokens = []
             await userObj.save()
             return sendError(400, res, 'fail validating token')
@@ -159,7 +154,6 @@ const logout = async (req: Request, res: Response) => {
 
 const authenticateMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const token = getTokenFromRequest(req)
-    console.log("i am in authenticateMiddleware auth.ts")
     if (token == null) return sendError(400, res, 'authentication missing')
     try {
         const user = <TokenInfo>jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)

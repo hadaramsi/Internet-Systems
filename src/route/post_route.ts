@@ -144,6 +144,43 @@ router.get('/:id', auth.authenticateMiddleware, async (req, res) => {
         })
     }
 })
+
+/**
+ * @swagger
+ * /post/{id}:
+ *   get:
+ *     summary: delete post
+ *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         requiered: true
+ *         schema:
+ *           type: string
+ *           description: the requested post id
+ *     responses:
+ *       200:
+ *         description: the requested post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *  
+ */
+router.get('/:id', auth.authenticateMiddleware, async (req, res) => {
+    try {
+        const response = await post.deletePost(request.fromRestRequest(req))
+        response.sendRestResponse(res)
+    } catch (err) {
+        console.log("route err ")
+        res.status(400).send({
+            'status': 'fail',
+            'message': err.message
+        })
+    }
+})
 /**
  * @swagger
  * /post:

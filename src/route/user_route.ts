@@ -103,6 +103,30 @@ router.get('/:id', auth.authenticateMiddleware, user.getUserById)
  *  
  */
 router.post('/', user.addNewUser)
-
+/**
+ * @swagger
+ * /student/{id}:
+ *   get:
+ *     summary: put user by id
+ *     tags: [Student]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         requiered: true
+ *         schema:
+ *           type: string
+ *           description: the requested post id
+ *     responses:
+ *       200:
+ *         description: the requested post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *  
+ */
+router.get('/:id', auth.authenticateMiddleware, user.putUserById)
 
 export = router

@@ -26,6 +26,8 @@ const error_1 = __importDefault(require("../error"));
 const getAllPosts = (req) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let posts = {};
+        console.log("req!-------------------------");
+        console.log(req);
         if (req.query.sender == null || req.query == null) {
             posts = yield post_model_1.default.find();
         }
@@ -38,21 +40,20 @@ const getAllPosts = (req) => __awaiter(void 0, void 0, void 0, function* () {
         return new response_1.default(null, req.userId, new error_1.default(400, err.message));
     }
 });
-const getUserPosts = (req) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        // let posts = {}
-        const posts = yield post_model_1.default.findByUserId(req.params.id);
-        // if (req.query.sender == null || req.query == null) {
-        //     posts = await Post.find()
-        // } else {
-        //     posts = await Post.find({ sender: req.query.sender })
-        // }
-        return new response_1.default(posts, req.userId, null);
-    }
-    catch (err) {
-        return new response_1.default(null, req.userId, new error_1.default(400, err.message));
-    }
-});
+// const getUserPosts = async (req: request) => {
+//     try {
+//         // let posts = {}
+//         const posts = await Post.findByUserId(req.params.id)
+//         // if (req.query.sender == null || req.query == null) {
+//         //     posts = await Post.find()
+//         // } else {
+//         //     posts = await Post.find({ sender: req.query.sender })
+//         // }
+//         return new response(posts, req.userId, null)
+//     } catch (err) {
+//         return new response(null, req.userId, new error(400, err.message))
+//     }
+// }
 const getPostById = (req) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const posts = yield post_model_1.default.findById(req.params.id);
@@ -64,11 +65,22 @@ const getPostById = (req) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const putPostById = (req) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log("success to update post in db");
         const post = yield post_model_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
         return new response_1.default(post, req.userId, null);
     }
     catch (err) {
         console.log("fail to update post in db");
+        return new response_1.default(null, req.userId, new error_1.default(400, err.message));
+    }
+});
+const deletePost = (req) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield post_model_1.default.findByIdAndDelete(req.params.id);
+        return new response_1.default(null, req.userId, null);
+    }
+    catch (err) {
+        console.log("fail to delete post in db");
         return new response_1.default(null, req.userId, new error_1.default(400, err.message));
     }
 });
@@ -94,5 +106,5 @@ const addNewPost = (req) => __awaiter(void 0, void 0, void 0, function* () {
         return new response_1.default(null, req.userId, new error_1.default(400, err.message));
     }
 });
-module.exports = { getAllPosts, addNewPost, getPostById, putPostById, getUserPosts };
+module.exports = { getAllPosts, addNewPost, getPostById, putPostById, deletePost };
 //# sourceMappingURL=post.js.map

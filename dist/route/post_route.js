@@ -47,6 +47,44 @@ const request_1 = __importDefault(require("../request"));
  * @swagger
  * /post:
  *   get:
+ *     summary: get list of post of user from server
+ *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: sender
+ *         schema:
+ *           type: string
+ *           description: filter the posts according to the given sender id
+ *     responses:
+ *       200:
+ *         description: the list of posts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                  $ref: '#/components/schemas/Post'
+ *
+ */
+router.get('/', auth_js_1.default.authenticateMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield post_js_1.default.getAllPosts(request_1.default.fromRestRequest(req));
+        response.sendRestResponse(res);
+    }
+    catch (err) {
+        console.log("route err ");
+        res.status(400).send({
+            'status': 'fail',
+            'message': err.message
+        });
+    }
+}));
+/**
+ * @swagger
+ * /post:
+ *   get:
  *     summary: get list of post from server
  *     tags: [Post]
  *     security:
@@ -108,6 +146,43 @@ router.get('/', auth_js_1.default.authenticateMiddleware, (req, res) => __awaite
 router.get('/:id', auth_js_1.default.authenticateMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield post_js_1.default.getPostById(request_1.default.fromRestRequest(req));
+        response.sendRestResponse(res);
+    }
+    catch (err) {
+        console.log("route err ");
+        res.status(400).send({
+            'status': 'fail',
+            'message': err.message
+        });
+    }
+}));
+/**
+ * @swagger
+ * /post/{id}:
+ *   get:
+ *     summary: delete post
+ *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         requiered: true
+ *         schema:
+ *           type: string
+ *           description: the requested post id
+ *     responses:
+ *       200:
+ *         description: the requested post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *
+ */
+router.get('/:id', auth_js_1.default.authenticateMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield post_js_1.default.deletePost(request_1.default.fromRestRequest(req));
         response.sendRestResponse(res);
     }
     catch (err) {

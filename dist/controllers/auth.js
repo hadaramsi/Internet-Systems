@@ -20,7 +20,6 @@ function sendError(status, res, error) {
     });
 }
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("killlll meeeeee");
     console.log(req.body);
     const email = req.body.email;
     const password = req.body.password;
@@ -44,7 +43,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
         yield newUser.save();
         return res.status(200).send({
-            'email': newUser._email,
+            'email': newUser.email,
             '_id': newUser._id
         });
     }
@@ -93,20 +92,16 @@ function getTokenFromRequest(req) {
     return authHeader.split(' ')[1];
 }
 const refresh = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("heyyyyyy-------");
     const refreshToken = getTokenFromRequest(req);
     if (refreshToken == null)
         return sendError(400, res, 'authentication missing');
     try {
-        console.log("heyyyyyy in try-------");
         const user = jsonwebtoken_1.default.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
         const userObj = yield user_model_1.default.findById(user.id);
         if (userObj == null) {
-            console.log("heyyyyyy in try if 1-------");
             return sendError(400, res, 'fail validating token');
         }
         if (!userObj.refresh_tokens.includes(refreshToken)) {
-            console.log("heyyyyyy in try if 2-------");
             userObj.refresh_tokens = [];
             yield userObj.save();
             return sendError(400, res, 'fail validating token');
@@ -147,7 +142,6 @@ const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const authenticateMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const token = getTokenFromRequest(req);
-    console.log("i am in authenticateMiddleware auth.ts");
     if (token == null)
         return sendError(400, res, 'authentication missing');
     try {
