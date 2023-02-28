@@ -20,11 +20,12 @@ function sendError(status, res, error) {
     });
 }
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("register");
     console.log(req.body);
     const email = req.body.email;
     const password = req.body.password;
     const fullName = req.body.fullName;
-    const image = req.body.image;
+    const image = req.body.imageUrl;
     if (email == null || password == null || fullName == null) {
         return sendError(400, res, 'please provide valid email and password');
     }

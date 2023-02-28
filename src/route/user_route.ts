@@ -127,6 +127,6 @@ router.post('/', user.addNewUser)
  *               $ref: '#/components/schemas/Post'
  *  
  */
-router.get('/:id', auth.authenticateMiddleware, user.putUserById)
+router.put('/:id', auth.authenticateMiddleware, user.putUserById)
 
 export = router

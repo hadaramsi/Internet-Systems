@@ -10,11 +10,12 @@ function sendError(status: number, res: Response, error: string) {
 }
 
 const register = async (req: Request, res: Response) => {
+    console.log("register")
     console.log(req.body)
     const email = req.body.email
     const password = req.body.password
     const fullName = req.body.fullName
-    const image = req.body.image
+    const image = req.body.imageUrl
 
 
     if (email == null || password == null || fullName == null) {

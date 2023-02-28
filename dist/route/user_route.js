@@ -126,6 +126,6 @@ router.post('/', user_1.default.addNewUser);
  *               $ref: '#/components/schemas/Post'
  *
  */
-router.get('/:id', auth_1.default.authenticateMiddleware, user_1.default.putUserById);
+router.put('/:id', auth_1.default.authenticateMiddleware, user_1.default.putUserById);
 module.exports = router;
 //# sourceMappingURL=user_route.js.map
