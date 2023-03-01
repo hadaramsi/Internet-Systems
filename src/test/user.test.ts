@@ -63,4 +63,10 @@ describe("User Tests", () => {
         expect(response.body._id).toEqual(newUserId);
         expect(response.body.fullName).toEqual(fullName);
     })
+    test("put user by id", async () => {
+        const response = await request(app).get('/user/' + newUserId).set("Authorization", "JWT " + accessToken)
+        expect(response.statusCode).toEqual(200)
+        expect(response.body._id).toEqual(newUserId);
+        expect(response.body.fullName).toEqual(fullName);
+    })
 })

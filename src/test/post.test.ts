@@ -6,6 +6,7 @@ import mongoose from 'mongoose'
 const newPostMessage = 'This is the new test post message'
 let newPostSender = ''
 let newPostId = ''
+let userId = ''
 const newPostMessageUpdated = 'This is the update message'
 
 const userEmail = "user1@gmail.com"
@@ -60,6 +61,7 @@ describe("Posts Tests", () => {
         expect(response.body.post[0].message).toEqual(newPostMessage)
         expect(response.body.post[0].sender).toEqual(newPostSender)
     })
+
     test("get post by Id", async () => {
         const response = await request(app).get('/post/' + newPostId).set('Authorization', 'JWT ' + accessToken)
         expect(response.statusCode).toEqual(200)

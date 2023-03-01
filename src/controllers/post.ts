@@ -55,7 +55,7 @@ const getPostById = async (req: request) => {
 
 const putPostById = async (req: request) => {
     try {
-        console.log("req in putPostById");
+        console.log("req in putPostById")
         console.log(req)
         const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true })
         console.log("update post :")

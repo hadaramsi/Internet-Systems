@@ -20,6 +20,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const newPostMessage = 'This is the new test post message';
 let newPostSender = '';
 let newPostId = '';
+let userId = '';
 const newPostMessageUpdated = 'This is the update message';
 const userEmail = "user1@gmail.com";
 const userPassword = "12345";
