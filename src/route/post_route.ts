@@ -148,8 +148,8 @@ router.get('/:id', auth.authenticateMiddleware, async (req, res) => {
 /**
  * @swagger
  * /post/{id}:
- *   get:
- *     summary: delete post
+ *   delete:
+ *     summary: delete post by id
  *     tags: [Post]
  *     security:
  *       - bearerAuth: []
@@ -167,7 +167,7 @@ router.get('/:id', auth.authenticateMiddleware, async (req, res) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Post'
- *  
+ *
  */
 router.delete('/:id', auth.authenticateMiddleware, async (req, res) => {
     try {

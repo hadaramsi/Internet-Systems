@@ -39,28 +39,10 @@ const router = express_1.default.Router();
 */
 /**
  * @swagger
- * /student:
+ * /user/{id}:
  *   get:
- *     summary: get list of post from server
- *     tags: [Student]
- *     responses:
- *       200:
- *         description: the list of posts
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                  $ref: '#/components/schemas/Student'
- *
- */
-router.get('/', user_1.default.getAllUsers);
-/**
- * @swagger
- * /student/{id}:
- *   get:
- *     summary: get student by id
- *     tags: [Student]
+ *     summary: get user by id
+ *     tags: [User]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -69,45 +51,53 @@ router.get('/', user_1.default.getAllUsers);
  *         requiered: true
  *         schema:
  *           type: string
- *           description: the requested post id
+ *           description: the requested user id
  *     responses:
  *       200:
- *         description: the requested post
+ *         description: the requested user
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Post'
+ *               $ref: '#/components/schemas/User'
  *
  */
 router.get('/:id', auth_1.default.authenticateMiddleware, user_1.default.getUserById);
 /**
  * @swagger
- * /student:
+ * /user/add:
  *   post:
- *     summary: add a new post
- *     tags: [Student]
+ *     summary: add new user
+ *     tags: [User]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Student'
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       200:
- *         description: the requested student
+ *         description: Register success retuns user info
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Student'
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Registeration error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               err:
+ *                 type: string
+ *                 description: The error description
  *
  */
 router.post('/', user_1.default.addNewUser);
 /**
  * @swagger
- * /student/{id}:
- *   get:
- *     summary: put user by id
- *     tags: [Student]
+ * /user/{id}:
+ *   put:
+ *     summary: update user by id
+ *     tags: [User]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -116,14 +106,14 @@ router.post('/', user_1.default.addNewUser);
  *         requiered: true
  *         schema:
  *           type: string
- *           description: the requested post id
+ *           description: the updated user id
  *     responses:
  *       200:
- *         description: the requested post
+ *         description: the updated user
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Post'
+ *               $ref: '#/components/schemas/User'
  *
  */
 router.put('/:id', auth_1.default.authenticateMiddleware, user_1.default.putUserById);

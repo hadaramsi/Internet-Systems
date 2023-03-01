@@ -159,8 +159,8 @@ router.get('/:id', auth_js_1.default.authenticateMiddleware, (req, res) => __awa
 /**
  * @swagger
  * /post/{id}:
- *   get:
- *     summary: delete post
+ *   delete:
+ *     summary: delete post by id
  *     tags: [Post]
  *     security:
  *       - bearerAuth: []
