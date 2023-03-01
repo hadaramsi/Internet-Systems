@@ -155,6 +155,7 @@ const logout = async (req: Request, res: Response) => {
 
 const authenticateMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const token = getTokenFromRequest(req)
+
     if (token == null) return sendError(400, res, 'authentication missing')
     try {
         const user = <TokenInfo>jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)

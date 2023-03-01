@@ -19,6 +19,8 @@ const post_model_1 = __importDefault(require("../models/post_model"));
 const user_model_1 = __importDefault(require("../models/user_model"));
 const userEmail = "user1@gmail.com";
 const userPassword = "12345";
+const image = "url";
+const fullName = "name";
 let accessToken = '';
 let refreshToken = '';
 beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
@@ -38,7 +40,9 @@ describe("Auth Tests", () => {
     test("Register test", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(server_1.default).post('/auth/register').send({
             "email": userEmail,
-            "password": userPassword
+            "password": userPassword,
+            "image": image,
+            "fullName": fullName,
         });
         expect(response.statusCode).toEqual(200);
     }));
@@ -48,7 +52,7 @@ describe("Auth Tests", () => {
             "password": userPassword + '4'
         });
         expect(response.statusCode).not.toEqual(200);
-        const access = response.body.accesstoken;
+        const access = response.body.tokens;
         expect(access).toBeUndefined();
     }));
     test("Login test", () => __awaiter(void 0, void 0, void 0, function* () {
@@ -57,13 +61,15 @@ describe("Auth Tests", () => {
             "password": userPassword
         });
         expect(response.statusCode).toEqual(200);
-        accessToken = response.body.accessToken;
+        accessToken = response.body.tokens.accessToken;
         expect(accessToken).not.toBeNull();
-        refreshToken = response.body.refreshToken;
+        refreshToken = response.body.tokens.refreshToken;
         expect(refreshToken).not.toBeNull();
     }));
     test("test sign valid access token", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(server_1.default).get('/post').set('Authorization', 'JWT ' + accessToken);
+        console.log(response);
+        console.log("response-----------");
         expect(response.statusCode).toEqual(200);
     }));
     test("test sign wrong access token", () => __awaiter(void 0, void 0, void 0, function* () {
@@ -78,6 +84,8 @@ describe("Auth Tests", () => {
     }));
     test("test refresh token", () => __awaiter(void 0, void 0, void 0, function* () {
         let response = yield (0, supertest_1.default)(server_1.default).get('/auth/refresh').set('Authorization', 'JWT ' + refreshToken);
+        console.log("9999");
+        console.log(response.body);
         expect(response.statusCode).toEqual(200);
         accessToken = response.body.accessToken;
         expect(accessToken).not.toBeNull();

@@ -20,6 +20,9 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const newPostMessage = 'This is the new test post message';
 let newPostSender = '';
 let newPostId = '';
+let newPostImage = 'url';
+const imageUrl = "url";
+const fullName = "name";
 let userId = '';
 const newPostMessageUpdated = 'This is the update message';
 const userEmail = "user1@gmail.com";
@@ -30,7 +33,9 @@ beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
     yield user_model_1.default.remove();
     const res = yield (0, supertest_1.default)(server_1.default).post('/auth/register').send({
         "email": userEmail,
-        "password": userPassword
+        "password": userPassword,
+        "image": imageUrl,
+        "fullName": fullName,
     });
     newPostSender = res.body._id;
 }));
@@ -40,7 +45,7 @@ function loginUser() {
             "email": userEmail,
             "password": userPassword
         });
-        accessToken = response.body.accessToken;
+        accessToken = response.body.tokens.accessToken;
     });
 }
 beforeEach(() => __awaiter(void 0, void 0, void 0, function* () {
@@ -56,7 +61,8 @@ describe("Posts Tests", () => {
         const response = yield (0, supertest_1.default)(server_1.default).post('/post').set('Authorization', 'JWT ' + accessToken)
             .send({
             message: newPostMessage,
-            sender: newPostSender
+            userId: newPostSender,
+            imageUrl: newPostImage
         });
         expect(response.statusCode).toEqual(200);
         expect(response.body.post.message).toEqual(newPostMessage);
@@ -66,6 +72,8 @@ describe("Posts Tests", () => {
     test("get all posts", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(server_1.default).get('/post').set('Authorization', 'JWT ' + accessToken);
         expect(response.statusCode).toEqual(200);
+        console.log("hiiiiii");
+        console.log(response.body);
         expect(response.body.post[0].message).toEqual(newPostMessage);
         expect(response.body.post[0].sender).toEqual(newPostSender);
     }));
@@ -85,12 +93,6 @@ describe("Posts Tests", () => {
         expect(response.body.post[0].message).toEqual(newPostMessage);
         expect(response.body.post[0].sender).toEqual(newPostSender);
     }));
-    // test("get all posts containing given text in post message", async () => {
-    //     const response = await request(app).get('/post?message=new')
-    //     expect(response.statusCode).toEqual(200)
-    //     expect(response.body[0].message).toEqual(newPostMessage)
-    //     expect(response.body[0].sender).toEqual(newPostSender)
-    // })
     test("update post by id", () => __awaiter(void 0, void 0, void 0, function* () {
         let response = yield (0, supertest_1.default)(server_1.default).put('/post/' + newPostId).set('Authorization', 'JWT ' + accessToken)
             .send({
@@ -117,6 +119,10 @@ describe("Posts Tests", () => {
         expect(response.statusCode).toEqual(200);
         expect(response.body.post.message).toEqual(newPostMessageUpdated);
         expect(response.body.post.sender).toEqual(newPostSender);
+    }));
+    test("delete post", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(server_1.default).delete('/post/12345');
+        expect(response.statusCode).toEqual(400);
     }));
 });
 //# sourceMappingURL=post.test.js.map

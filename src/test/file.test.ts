@@ -6,6 +6,7 @@ import fs from 'mz/fs'
 
 beforeAll(async () => {
     console.log('beforeAll')
+    mongoose.connection.close()
 })
 
 afterAll(async () => {

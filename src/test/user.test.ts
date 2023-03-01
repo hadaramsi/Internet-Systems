@@ -64,9 +64,38 @@ describe("User Tests", () => {
         expect(response.body.fullName).toEqual(fullName);
     })
     test("put user by id", async () => {
-        const response = await request(app).get('/user/' + newUserId).set("Authorization", "JWT " + accessToken)
+        let response = await request(app).put('/user/' + newUserId).set("Authorization", "JWT " + accessToken).send({
+            "fullName": "user",
+            "image": "user.jpg"
+        })
         expect(response.statusCode).toEqual(200)
-        expect(response.body._id).toEqual(newUserId);
-        expect(response.body.fullName).toEqual(fullName);
+        expect(response.body._id).toEqual(newUserId)
+        expect(response.body.fullName).toEqual("user")
+        expect(response.body.image).toEqual("user.jpg")
+
+        response = await request(app).get('/user/' + newUserId).set('Authorization', 'JWT ' + accessToken)
+        expect(response.statusCode).toEqual(200)
+        console.log("test--------------------------------")
+        console.log(response.body)
+        expect(response.body._id).toEqual(newUserId)
+        expect(response.body.fullName).toEqual("user")
+        expect(response.body.image).toEqual("user.jpg")
+
+        response = await request(app).put('/user/12345').set('Authorization', 'JWT ' + accessToken)
+            .send({
+                "fullName": "user",
+                "image": "user.jpg"
+            })
+        expect(response.statusCode).toEqual(400)
+
+        // response = await request(app).put('/post/' + newUserId).set('Authorization', 'JWT ' + accessToken)
+        //     .send({
+        //         "imageUrl": "user.jpg"
+        //     })
+        // expect(response.statusCode).toEqual(200)
+        // expect(response.body.user._id).toEqual(newUserId)
+        // expect(response.body.user.fullName).toEqual(fullName)
+        // expect(response.body.user.imageUrl).toEqual(imageUrl)
+
     })
 })

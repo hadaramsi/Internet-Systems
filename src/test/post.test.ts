@@ -6,6 +6,10 @@ import mongoose from 'mongoose'
 const newPostMessage = 'This is the new test post message'
 let newPostSender = ''
 let newPostId = ''
+let newPostImage = 'url'
+const imageUrl = "url"
+const fullName = "name"
+
 let userId = ''
 const newPostMessageUpdated = 'This is the update message'
 
@@ -18,7 +22,9 @@ beforeAll(async () => {
     await User.remove()
     const res = await request(app).post('/auth/register').send({
         "email": userEmail,
-        "password": userPassword
+        "password": userPassword,
+        "image": imageUrl,
+        "fullName": fullName,
     })
     newPostSender = res.body._id
 })
@@ -28,7 +34,7 @@ async function loginUser() {
         "email": userEmail,
         "password": userPassword
     })
-    accessToken = response.body.accessToken
+    accessToken = response.body.tokens.accessToken
 }
 
 beforeEach(async () => {
@@ -46,7 +52,8 @@ describe("Posts Tests", () => {
         const response = await request(app).post('/post').set('Authorization', 'JWT ' + accessToken)
             .send({
                 message: newPostMessage,
-                sender: newPostSender
+                userId: newPostSender,
+                imageUrl: newPostImage
             })
         expect(response.statusCode).toEqual(200)
         expect(response.body.post.message).toEqual(newPostMessage)
@@ -58,6 +65,8 @@ describe("Posts Tests", () => {
     test("get all posts", async () => {
         const response = await request(app).get('/post').set('Authorization', 'JWT ' + accessToken)
         expect(response.statusCode).toEqual(200)
+        console.log("hiiiiii")
+        console.log(response.body)
         expect(response.body.post[0].message).toEqual(newPostMessage)
         expect(response.body.post[0].sender).toEqual(newPostSender)
     })
@@ -78,12 +87,8 @@ describe("Posts Tests", () => {
         expect(response.body.post[0].message).toEqual(newPostMessage)
         expect(response.body.post[0].sender).toEqual(newPostSender)
     })
-    // test("get all posts containing given text in post message", async () => {
-    //     const response = await request(app).get('/post?message=new')
-    //     expect(response.statusCode).toEqual(200)
-    //     expect(response.body[0].message).toEqual(newPostMessage)
-    //     expect(response.body[0].sender).toEqual(newPostSender)
-    // })
+
+
     test("update post by id", async () => {
         let response = await request(app).put('/post/' + newPostId).set('Authorization', 'JWT ' + accessToken)
             .send({
@@ -114,5 +119,9 @@ describe("Posts Tests", () => {
         expect(response.body.post.message).toEqual(newPostMessageUpdated)
         expect(response.body.post.sender).toEqual(newPostSender)
     })
+    test("delete post", async () => {
+        const response = await request(app).delete('/post/12345')
+        expect(response.statusCode).toEqual(400)
 
+    })
 })

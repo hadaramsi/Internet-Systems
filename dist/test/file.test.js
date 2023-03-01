@@ -18,6 +18,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const fs_1 = __importDefault(require("mz/fs"));
 beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
     console.log('beforeAll');
+    mongoose_1.default.connection.close();
 }));
 afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
     console.log('afterAll');

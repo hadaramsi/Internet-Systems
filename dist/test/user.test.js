@@ -73,10 +73,35 @@ describe("User Tests", () => {
         expect(response.body.fullName).toEqual(fullName);
     }));
     test("put user by id", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(server_1.default).get('/user/' + newUserId).set("Authorization", "JWT " + accessToken);
+        let response = yield (0, supertest_1.default)(server_1.default).put('/user/' + newUserId).set("Authorization", "JWT " + accessToken).send({
+            "fullName": "user",
+            "image": "user.jpg"
+        });
         expect(response.statusCode).toEqual(200);
         expect(response.body._id).toEqual(newUserId);
-        expect(response.body.fullName).toEqual(fullName);
+        expect(response.body.fullName).toEqual("user");
+        expect(response.body.image).toEqual("user.jpg");
+        response = yield (0, supertest_1.default)(server_1.default).get('/user/' + newUserId).set('Authorization', 'JWT ' + accessToken);
+        expect(response.statusCode).toEqual(200);
+        console.log("test--------------------------------");
+        console.log(response.body);
+        expect(response.body._id).toEqual(newUserId);
+        expect(response.body.fullName).toEqual("user");
+        expect(response.body.image).toEqual("user.jpg");
+        response = yield (0, supertest_1.default)(server_1.default).put('/user/12345').set('Authorization', 'JWT ' + accessToken)
+            .send({
+            "fullName": "user",
+            "image": "user.jpg"
+        });
+        expect(response.statusCode).toEqual(400);
+        // response = await request(app).put('/post/' + newUserId).set('Authorization', 'JWT ' + accessToken)
+        //     .send({
+        //         "imageUrl": "user.jpg"
+        //     })
+        // expect(response.statusCode).toEqual(200)
+        // expect(response.body.user._id).toEqual(newUserId)
+        // expect(response.body.user.fullName).toEqual(fullName)
+        // expect(response.body.user.imageUrl).toEqual(imageUrl)
     }));
 });
 //# sourceMappingURL=user.test.js.map

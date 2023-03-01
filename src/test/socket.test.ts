@@ -8,6 +8,9 @@ import Post from '../models/post_model'
 import User from '../models/user_model'
 
 const newPostMessage = 'This is the new test post message - socket test'
+const newImageUrl = 'url'
+const anotherPostImage = 'url'
+
 const anotherPostMessage = 'This is the another test post message - socket test'
 let newPostId = ''
 const newPostMessageUpdated = 'This is the update message - socket test'
@@ -15,9 +18,13 @@ let newMessage = ''
 const message = "this is my message"
 const userEmail = "user1@gmail.com"
 const userPassword = "12345"
+const userFullName = "user name"
+const userImage = "url"
 
 const userEmail2 = "user2@gmail.com"
 const userPassword2 = "12345"
+const userFullName2 = "user name 2"
+const userImage2 = "url2"
 
 type Client = {
     socket: Socket<DefaultEventsMap, DefaultEventsMap>,
@@ -36,17 +43,24 @@ function clientSocketConnect(clientSocket: Socket<DefaultEventsMap, DefaultEvent
     })
 }
 
-const connectUser = async (userEmail, userPassword) => {
+const connectUser = async (userEmail, userPassword, userFullName, userImage) => {
     const response1 = await request(server).post('/auth/register').send({
         "email": userEmail,
-        "password": userPassword
+        "password": userPassword,
+        "fullName": userFullName,
+        "image": userImage
     })
+
     const userId = response1.body._id
+    console.log(userId)
+
     const response = await request(server).post('/auth/login').send({
         "email": userEmail,
         "password": userPassword
     })
-    const token = response.body.accessToken
+
+    const token = response.body.tokens.accessToken
+    console.log(token)
 
     const socket = Client('http://localhost:' + process.env.PORT, {
         auth: {
@@ -64,8 +78,8 @@ describe("my project", () => {
         await Post.remove()
         await User.remove()
         await Message.remove()
-        client1 = await connectUser(userEmail, userPassword)
-        client2 = await connectUser(userEmail2, userPassword2)
+        client1 = await connectUser(userEmail, userPassword, userFullName, userImage)
+        client2 = await connectUser(userEmail2, userPassword2, userFullName2, userImage2)
         console.log("finish beforeAll")
     });
 
@@ -74,7 +88,7 @@ describe("my project", () => {
         client2.socket.close()
         await Post.remove()
         await User.remove()
-        // await Message.remove()
+        await Message.remove()
         server.close()
         mongoose.connection.close()
     })
@@ -90,9 +104,10 @@ describe("my project", () => {
 
     test("post add new test", (done) => {
         client1.socket.once("post:add.response", (arg) => {
-            console.log("on any" + arg)
             expect(arg.body.message).toBe(newPostMessage)
             expect(arg.body.sender).toBe(client1.id)
+            expect(arg.body.imageUrl).toBe(newImageUrl)
+
             expect(arg.status).toBe('ok')
             newPostId = arg.body._id
             done()
@@ -100,7 +115,9 @@ describe("my project", () => {
         console.log(" test post add new post")
         client1.socket.emit("post:add", {
             message: newPostMessage,
-            sender: client1.id,
+            userId: client1.id,
+            imageUrl: newImageUrl
+
         })
     })
 
@@ -119,6 +136,8 @@ describe("my project", () => {
             console.log("on any " + arg)
             expect(arg.body.message).toBe(newPostMessage)
             expect(arg.body.sender).toBe(client1.id)
+            expect(arg.body.imageUrl).toBe(newImageUrl)
+
             expect(arg.status).toBe('ok')
             done()
         })
@@ -146,6 +165,7 @@ describe("my project", () => {
             console.log("on any " + arg)
             expect(arg.body[0].message).toBe(newPostMessage)
             expect(arg.body[0].sender).toBe(client1.id)
+            expect(arg.body[0].imageUrl).toBe(newImageUrl)
             expect(arg.status).toBe('ok')
             done()
         });
@@ -174,6 +194,8 @@ describe("my project", () => {
             console.log("on any" + arg)
             expect(arg.body.message).toBe(newPostMessageUpdated)
             expect(arg.body.sender).toBe(client1.id)
+            expect(arg.body.imageUrl).toBe(newImageUrl)
+
             expect(arg.status).toBe('ok')
             done()
         })
@@ -182,6 +204,7 @@ describe("my project", () => {
             id: newPostId,
             message: newPostMessageUpdated,
             sender: client1.id,
+            imageUrl: newImageUrl
         })
     })
 
@@ -196,7 +219,8 @@ describe("my project", () => {
         console.log("test post add new post by another client")
         client2.socket.emit("post:add", {
             message: anotherPostMessage,
-            sender: client2.id,
+            userId: client2.id,
+            imageUrl: anotherPostImage
         })
     })
 
@@ -212,6 +236,7 @@ describe("my project", () => {
             id: 7643,
             message: newPostMessageUpdated,
             sender: client1.id,
+            imageUrl: newImageUrl
         })
     })
 
@@ -220,6 +245,8 @@ describe("my project", () => {
             console.log("on any" + arg)
             expect(arg.body.message).toBe(newPostMessageUpdated)
             expect(arg.body.sender).toBe(client1.id)
+            expect(arg.body.imageUrl).toBe(newImageUrl)
+
             expect(arg.status).toBe('ok')
             done()
         })
@@ -227,19 +254,18 @@ describe("my project", () => {
         client1.socket.emit("post:put", {
             id: newPostId,
             message: newPostMessageUpdated,
+            imageUrl: newImageUrl
         })
     })
     test("Test chat send messages from client 1 to client 2", (done) => {
-        // const message = "hi... test 123"
         client2.socket.once('chat:message', (args) => {
-            // expect(args.to).toBe(client2.id)
             expect(args.message).toBe(message)
             expect(args.from).toBe(client1.id)
+
             expect(args.res.status).toBe('ok')
             done()
         })
         client1.socket.emit("chat:send_message", {
-            // "to": client2.id,
             "message": message
         })
     })
@@ -249,17 +275,14 @@ describe("my project", () => {
             done()
         })
         client1.socket.emit("chat:send_message", {
-            // "to": client2.id
         })
     })
 
     test("Test chat get all messages from client1 to client2", (done) => {
         client1.socket.once("chat:get", (args) => {
             expect(args.body.length).toBe(1)
-            expect(args.body[0].message).toBe(client2.id)
-            expect(args.body[0].body).toBe(message)
+            expect(args.body[0].message).toBe(message)
             expect(args.body[0].sender).toBe(client1.id)
-            // expect(args.body.reciver).toBe(client2.id)
             expect(args.status).toBe('ok')
             done()
         })
@@ -267,16 +290,6 @@ describe("my project", () => {
             "sender": client1.id
         })
     })
-    test("Test chat get all messages to client1", (done) => {
-        client1.socket.once("chat:get", (args) => {
-            expect(args.body.length).toBe(0)
-            expect(args.status).toBe('ok')
-            done()
-        })
-        client1.socket.emit("chat:get", {
-            "reciver": client1.id
-        })
-    })
 
 
-});
+})
