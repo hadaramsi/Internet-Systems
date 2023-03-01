@@ -16,14 +16,14 @@ const message_1 = __importDefault(require("../controllers/message"));
 module.exports = (io, socket) => {
     const sendMessage = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         console.log('chat:send_message');
-        const to = payload.to;
+        // const to = payload.to
         const message = payload.message;
         const from = socket.data.user;
         // io.to(to).emit("chat:message", { 'to': to, 'from': from, 'message': message })
         try {
             const response = yield message_1.default.addNewMessage(new request_1.default(payload, from, null, null));
-            io.to(to).emit("chat:message", {
-                to: to,
+            io.emit("chat:message", {
+                // to: to,
                 from: from,
                 message: message,
                 res: response,

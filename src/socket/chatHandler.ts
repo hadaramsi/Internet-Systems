@@ -8,7 +8,7 @@ export = (io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap>,
 
     const sendMessage = async (payload) => {
         console.log('chat:send_message')
-        const to = payload.to
+        // const to = payload.to
         const message = payload.message
         const from = socket.data.user
         // io.to(to).emit("chat:message", { 'to': to, 'from': from, 'message': message })
@@ -16,8 +16,8 @@ export = (io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap>,
             const response = await messageController.addNewMessage(
                 new request(payload, from, null, null)
             )
-            io.to(to).emit("chat:message", {
-                to: to,
+            io.emit("chat:message", {
+                // to: to,
                 from: from,
                 message: message,
                 res: response,

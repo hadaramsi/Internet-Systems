@@ -19,9 +19,9 @@ const getAllMessages = (req) => __awaiter(void 0, void 0, void 0, function* () {
         let messages = {};
         if (req.query != null && req.query.sender != null) {
             messages = yield message_model_1.default.find({ sender: req.query.sender });
-        }
-        else if (req.query != null && req.query.reciver != null) {
-            messages = yield message_model_1.default.find({ reciver: req.query.reciver });
+            // } else if (req.query != null && req.query.reciver != null) {
+            //     messages = await Message.find({ reciver: req.query.reciver })
+            // }
         }
         else {
             messages = yield message_model_1.default.find();
@@ -37,9 +37,9 @@ const addNewMessage = (req) => __awaiter(void 0, void 0, void 0, function* () {
     const sender = req.userId;
     const rec = req.body["to"];
     const message = new message_model_1.default({
-        body: msg,
+        message: msg,
         sender: sender,
-        reciver: rec
+        // reciver: rec
     });
     try {
         const newMessage = yield message.save();

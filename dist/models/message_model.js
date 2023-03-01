@@ -1,7 +1,7 @@
 "use strict";
 const mongoose = require('mongoose');
 const messageSchema = new mongoose.Schema({
-    body: {
+    message: {
         type: String,
         required: true
     },
@@ -9,10 +9,10 @@ const messageSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    reciver: {
-        type: String,
-        required: true
-    }
+    // reciver: {
+    //     type: String,
+    //     required: true
+    // }
 });
 module.exports = mongoose.model('Message', messageSchema);
 //# sourceMappingURL=message_model.js.map

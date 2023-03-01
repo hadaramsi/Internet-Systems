@@ -8,10 +8,10 @@ const getAllMessages = async (req: request) => {
         let messages = {}
         if (req.query != null && req.query.sender != null) {
             messages = await Message.find({ sender: req.query.sender })
-        } else if (req.query != null && req.query.reciver != null) {
-            messages = await Message.find({ reciver: req.query.reciver })
-        }
-        else {
+            // } else if (req.query != null && req.query.reciver != null) {
+            //     messages = await Message.find({ reciver: req.query.reciver })
+            // }
+        } else {
             messages = await Message.find()
         }
         return new response(messages, req.userId, null)
@@ -25,9 +25,9 @@ const addNewMessage = async (req: request) => {
     const sender = req.userId
     const rec = req.body["to"]
     const message = new Message({
-        body: msg,
+        message: msg,
         sender: sender,
-        reciver: rec
+        // reciver: rec
     })
     try {
         const newMessage = await message.save()

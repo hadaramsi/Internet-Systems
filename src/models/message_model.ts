@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const messageSchema = new mongoose.Schema({
-    body: {
+    message: {
         type: String,
         required: true
     },
@@ -9,10 +9,10 @@ const messageSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    reciver: {
-        type: String,
-        required: true
-    }
+    // reciver: {
+    //     type: String,
+    //     required: true
+    // }
 })
 
 export = mongoose.model('Message', messageSchema)
